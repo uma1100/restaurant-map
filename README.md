@@ -36,6 +36,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 ## ref
 
 - https://zenn.dev/nbr41to/articles/adabca83b2e6ea
+- https://github.com/plhery/node-twitter-api-v2/blob/HEAD/doc/examples.md#stream-tweets-in-real-time
 
 ## prisma command
 
