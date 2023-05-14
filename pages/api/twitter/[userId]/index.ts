@@ -7,6 +7,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { userId } = req.query;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+  console.log(process.env.DATABASE_URL);
+
 
   const client = new Client(process.env.TWITTER_BEARER_TOKEN as string);
 
@@ -17,15 +19,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   // save planetscale
   if (!tweets.data) res.status(404).json({ message: "User tweets not found" });
-  for (const tweet of tweets.data) {
-    console.log(tweet);
-    await db.book.create({
-      data: {
-        name: tweet.text,
-      }
-    })
-  }
+  // for (const tweet of tweets.data) {
+  //   console.log(tweet);
+  //   await db.book.create({
+  //     data: {
+  //       name: tweet.text,
+  //     }
+  //   })
+  // }
 
+
+  await db.book.create({
+    data: {
+      name: "tweet",
+    }
+  })
 
   res.status(200).json({ name: data, tweets: tweets, date: today.toISOString() });
 
