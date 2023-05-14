@@ -1,6 +1,5 @@
 generator client {
   provider = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
 }
 datasource db {
   provider = "mysql"
@@ -8,7 +7,7 @@ datasource db {
   relationMode = "prisma"
 }
 
-model RESTAURANT {
+model Restaurnat {
   id Int @id @default(autoincrement())
   name String
   location String
@@ -17,4 +16,13 @@ model RESTAURANT {
   dateTime DateTime
   author String
   authorId Int
+  tweetId String
+}
+
+model Book {
+  id Int @id @default(autoincrement())
+  name String
+  title String?
+  text String?
+  genre String?
 }
