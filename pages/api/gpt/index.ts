@@ -2,12 +2,13 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { NextApiRequest, NextApiResponse } from 'next';
 import { Configuration, OpenAIApi } from 'openai';
 
-interface Message {
-  role: string;
-  content: string;
+interface APIResponse {
+  prefecture: string;
+  station: string;
+  name: string;
 }
 
-interface APIResponse {
+interface OpenAPIResponse {
   choices: {
     message: {
       content: string;
@@ -37,8 +38,8 @@ export default async function handler(
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
-  const { tweetText, userName, userId } = req.body;
-  const gptContent = tweetText + "\n" + "上記のテキストをjson形式で県名(key=prefecture)と駅名(key=station)と店名(key=name)を抽出してください。含まれていない場合はnullで返してください。";
+  const { message } = req.body;
+  const gptContent = message + "\n" + "上記のテキストをjson形式で県名(key=prefecture)と駅名(key=station)と店名(key=name)を推測してください。含まれていない場合はnullで返してください。";
 
   try {
     // 設定を諸々のせてAPIとやり取り
@@ -51,8 +52,9 @@ export default async function handler(
       temperature: 0.9,
       max_tokens: 100,
     });
+    const data = completion.data as OpenAPIResponse;
     // GPTの返答を取得
-    res.status(200).json({ result: completion.data.choices[0].message });
+    res.status(200).json(JSON.parse(data.choices[0].message.content) as APIResponse);
   } catch (error: any) {
     // Consider adjusting the error handling logic for your use case
     if (error.response) {

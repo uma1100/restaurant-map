@@ -10,13 +10,14 @@ datasource db {
 model Restaurnat {
   id Int @id @default(autoincrement())
   name String
-  location String
-  description String
-  imageUrl String
-  dateTime DateTime
-  author String
-  authorId Int
+  station String
+  prefecture String
+  tweetText String
   tweetId String
+  imageUrl String?
+  dateTime DateTime?
+  userName String
+  userId String
 }
 
 model Book {
