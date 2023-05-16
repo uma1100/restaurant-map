@@ -37,7 +37,8 @@ export default async function handler(
     res.status(405).json({ message: 'Method Not Allowed' });
     return;
   }
-  const message = req.body.message + "\n" + "上記のテキストをjson形式で県名(key=prefecture)と駅名(key=station)と店名(key=name)を抽出してください。含まれていない場合はnullで返してください。";
+  const { tweetText, userName, userId } = req.body;
+  const gptContent = tweetText + "\n" + "上記のテキストをjson形式で県名(key=prefecture)と駅名(key=station)と店名(key=name)を抽出してください。含まれていない場合はnullで返してください。";
 
   try {
     // 設定を諸々のせてAPIとやり取り
@@ -45,7 +46,7 @@ export default async function handler(
       model: "gpt-3.5-turbo",
       messages: [{
         "role": "user",
-        "content": message
+        "content": gptContent
       }],
       temperature: 0.9,
       max_tokens: 100,
