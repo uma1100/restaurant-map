@@ -24,7 +24,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(404).json({ message: "User not found" });
     return;
   }
-  // const tweets = await client.tweets.usersIdTweets(data.id, { start_time: today.toISOString(), exclude: ["retweets","replies"], expansions: ["attachments.media_keys"], "media.fields": ["url"]});
+  // const tweets = await client.tweets.usersIdTweets(data.id, { start_time: today.toISOString(), exclude: ["retweets","replies"], });
   const tweets = await client.tweets.usersIdTweets(data.id, { exclude: ["retweets", "replies"], expansions: ["attachments.media_keys"], "media.fields": ["url"] });
 
   // save planetscale
@@ -32,43 +32,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(404).json({ message: "User tweets not found" });
     return;
   }
+
   for (const tweet of tweets.data) {
-    const responseChatGPT = await responseGPT(tweet.text);
-    console.log(responseChatGPT);
-    if (responseChatGPT.name === null || responseChatGPT.prefecture === null || responseChatGPT.station === null) {
-      continue;
-    }
-    const imageUrl: any = tweet.attachments?.media_keys ? tweet.attachments?.media_keys.map((mediaKey) => {
+    const imageUrl: (string[] | null)[] | null = tweet.attachments?.media_keys ? tweet.attachments?.media_keys.map((mediaKey) => {
       const media = tweets.includes?.media?.find((media) => media.media_key === mediaKey) as media;
       return media?.url ? media?.url : null;
     }) : null;
-    await db.restaurnat.upsert({
-      where: {
-        tweetId: tweet.id,
-      },
-      create: {
-        name: responseChatGPT.name,
-        prefecture: responseChatGPT.prefecture,
-        station: responseChatGPT.station,
-        tweetText: tweet.text,
-        tweetId: tweet.id,
-        userName: data.name,
-        userId: userId as string,
-        imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
-      },
-      update: {
-        name: responseChatGPT.name,
-        prefecture: responseChatGPT.prefecture,
-        station: responseChatGPT.station,
-        tweetText: tweet.text,
-        tweetId: tweet.id,
-        userName: data.name,
-        userId: userId as string,
-        imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
-      },
-    })
+    if (imageUrl === null) {
+      continue;
+    }
+    console.log(imageUrl[0]);
   }
-
   res.status(200).json({ name: data, tweets: tweets, date: today.toISOString() });
 
 }
