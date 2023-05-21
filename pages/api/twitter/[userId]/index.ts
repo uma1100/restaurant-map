@@ -50,7 +50,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         name: responseChatGPT.name,
         prefecture: responseChatGPT.prefecture,
         station: responseChatGPT.station,
-        tweetText: tweet.text,
+        tweetText: tweet.text.split("https")[0],
         tweetId: tweet.id,
         userName: data.name,
         userId: userId as string,
