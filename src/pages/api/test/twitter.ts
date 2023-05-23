@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "twitter-api-sdk";
-import { db } from "lib/database";
+import { db } from "@/lib/database";
 import { Restaurnat } from "@prisma/client";
-import { responseGPT } from "lib/gpt";
+import { responseGPT } from "@/lib/gpt";
 
 export interface media {
   media_key: string;

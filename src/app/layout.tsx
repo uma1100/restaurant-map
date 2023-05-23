@@ -12,6 +12,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="ja">
       <body className={inter.className}>{children}</body>
+      <script async src="https://platform.twitter.com/widgets.js" charSet="utf-8" />
     </html>
   );
 }

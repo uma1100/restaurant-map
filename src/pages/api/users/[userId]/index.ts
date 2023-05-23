@@ -1,5 +1,5 @@
 import { Book } from "@prisma/client";
-import { db } from "lib/database";
+import { db } from "@/lib/database";
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse<Book[]>) {

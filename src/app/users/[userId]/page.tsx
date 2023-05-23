@@ -1,5 +1,5 @@
-import TwitterAccordion from 'components/TwitterAccordion';
-import { db } from 'lib/database';
+import TwitterAccordion from '@/components/TwitterAccordion';
+import { db } from '@/lib/database';
 
 const getRestaurants = async (userId: string) => {
   const posts = await db.restaurnat.findMany({
@@ -31,7 +31,7 @@ export default async function Article({ params }: { params: { userId: string } }
                 >
                   地図で見る
                 </a>
-                <TwitterAccordion id={restaurant.id} tweetId={restaurant.tweetId} />
+                <TwitterAccordion {...restaurant} />
               </div>
             </div>
           </div>

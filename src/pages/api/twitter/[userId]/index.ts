@@ -1,8 +1,8 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "twitter-api-sdk";
-import { db } from "lib/database";
+import { db } from "@/lib/database";
 import { Restaurnat } from "@prisma/client";
-import { responseGPT } from "lib/gpt";
+import { responseGPT } from "@/lib/gpt";
 
 export interface media {
   media_key: string;
@@ -55,6 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userName: data.name,
         userId: userId as string,
         imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
+        imageUrlInTweetCard: tweet.text.split("https")[1] ? tweet.text.split("https")[1] : undefined,
       },
       update: {
         name: responseChatGPT.name,
@@ -65,6 +66,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         userName: data.name,
         userId: userId as string,
         imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
+        imageUrlInTweetCard: tweet.text.split("https")[1] ? tweet.text.split("https")[1] : undefined,
       },
     })
   }

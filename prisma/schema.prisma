@@ -15,6 +15,7 @@ model Restaurnat {
   tweetText String
   tweetId String @unique
   imageUrl String?
+  imageUrlInTweetCard String?
   dateTime DateTime?
   userName String
   userId String
