@@ -13,8 +13,9 @@ model Restaurnat {
   station String
   prefecture String
   tweetText String
-  tweetId String
+  tweetId String @unique
   imageUrl String?
+  imageUrlInTweetCard String?
   dateTime DateTime?
   userName String
   userId String
