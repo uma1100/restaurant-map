@@ -7,5 +7,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
   // console.log(books);
   const tables = await db.book.findMany();
   console.log(tables);
-  res.status(200).json("ok");
+  res.status(200).json(tables);
 }
