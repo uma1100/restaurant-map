@@ -7,18 +7,25 @@ datasource db {
   relationMode = "prisma"
 }
 
-model Restaurnat {
+model Restaurant {
   id Int @id @default(autoincrement())
   name String
   station String
   prefecture String
   tweetText String
   tweetId String @unique
-  imageUrl String?
+  imageUrl ImageUrl[]
   imageUrlInTweetCard String?
   dateTime DateTime?
   userName String
   userId String
+}
+
+model ImageUrl {
+  id Int @id @default(autoincrement())
+  url String?
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
 }
 
 model Book {

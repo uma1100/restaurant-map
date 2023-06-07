@@ -12,6 +12,7 @@ export interface media {
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { userId } = req.query;
+  console.log(userId);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   console.log(process.env.DATABASE_URL);
