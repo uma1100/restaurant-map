@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { Client } from "twitter-api-sdk";
 import { db } from "@/lib/database";
-import { Restaurnat } from "@prisma/client";
+import { Restaurant } from "@prisma/client";
 import { responseGPT } from "@/lib/gpt";
 
 export interface media {
@@ -38,11 +38,12 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (responseChatGPT.name === null || responseChatGPT.prefecture === null || responseChatGPT.station === null) {
       continue;
     }
-    const imageUrl: any = tweet.attachments?.media_keys ? tweet.attachments?.media_keys.map((mediaKey) => {
+    const imageUrl = tweet.attachments?.media_keys ? tweet.attachments?.media_keys.map((mediaKey) => {
       const media = tweets.includes?.media?.find((media) => media.media_key === mediaKey) as media;
       return media?.url ? media?.url : null;
     }) : null;
-    await db.restaurnat.upsert({
+    const convertedImageUrls = imageUrl ? imageUrl.map((url) => ({ url })) : [{ url: null }];
+    await db.restaurant.upsert({
       where: {
         tweetId: tweet.id,
       },
@@ -54,7 +55,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         tweetId: tweet.id,
         userName: data.name,
         userId: userId as string,
-        imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
+        imageUrl: {
+          create: convertedImageUrls,
+        },
         imageUrlInTweetCard: tweet.text.split("https")[1] ? tweet.text.split("https")[1] : undefined,
       },
       update: {
@@ -65,7 +68,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         tweetId: tweet.id,
         userName: data.name,
         userId: userId as string,
-        imageUrl: imageUrl[0] ? imageUrl[0] : undefined,
+        imageUrl: {
+          create: convertedImageUrls,
+        },
         imageUrlInTweetCard: tweet.text.split("https")[1] ? tweet.text.split("https")[1] : undefined,
       },
     })
